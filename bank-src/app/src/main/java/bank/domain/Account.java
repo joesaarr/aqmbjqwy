@@ -7,6 +7,9 @@ import lombok.experimental.Accessors;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Account entity
+ */
 @Data
 @Accessors(chain = true)
 public class Account {

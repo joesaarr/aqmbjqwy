@@ -10,6 +10,9 @@ import javax.validation.constraints.NotNull;
 import java.util.Currency;
 import java.util.Set;
 
+/**
+ * Request object for creating a new account
+ */
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)

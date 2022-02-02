@@ -13,6 +13,9 @@ import javax.validation.Valid;
 
 import static bank.controller.AccountController.PATH;
 
+/**
+ * Account controller
+ */
 @Validated
 @RestController
 @RequestMapping(PATH)

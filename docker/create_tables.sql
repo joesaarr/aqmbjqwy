@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS account (
     id serial,
-    customer_id varchar(250) NOT NULL,
-    country varchar(250) NOT NULL,
+    customer_id varchar(255) NOT NULL,
+    country varchar(255) NOT NULL,
     PRIMARY KEY (id)
 );
 

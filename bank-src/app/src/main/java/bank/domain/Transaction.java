@@ -7,6 +7,9 @@ import lombok.experimental.Accessors;
 import java.math.BigDecimal;
 import java.util.Currency;
 
+/**
+ * Transaction entity
+ */
 @Data
 @Accessors(chain = true)
 public class Transaction {

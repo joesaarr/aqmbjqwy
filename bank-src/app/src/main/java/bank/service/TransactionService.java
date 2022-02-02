@@ -21,6 +21,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Transaction service
+ */
 @Service
 @Transactional(isolation = Isolation.SERIALIZABLE)
 public class TransactionService {
@@ -37,6 +40,11 @@ public class TransactionService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    /**
+     * Create new transaction
+     * @param request transaction request
+     * @return transaction dto
+     */
     public TransactionDto createTransaction(TransactionRequest request) {
         var account = accountMapper.selectAccount(request.getAccountId())
                 .orElseThrow(() -> new AccountNotFoundException(request.getAccountId()));
@@ -67,6 +75,11 @@ public class TransactionService {
         return transactionDto;
     }
 
+    /**
+     * Find all transactions of account
+     * @param accountId account id
+     * @return list of transaction dtos
+     */
     public List<TransactionDto> findAllByAccountId(Long accountId) {
         accountMapper.selectAccount(accountId)
                 .orElseThrow(() -> new AccountNotFoundException(accountId));

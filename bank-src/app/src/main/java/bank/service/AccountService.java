@@ -13,13 +13,12 @@ import bank.request.CreateAccountRequest;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Currency;
-import java.util.stream.Stream;
 
+/**
+ * Account service
+ */
 @Service
 public class AccountService {
 
@@ -32,6 +31,11 @@ public class AccountService {
     @Autowired
     RabbitTemplate rabbitTemplate;
 
+    /**
+     * Create new account
+     * @param request account creation request
+     * @return created account dto
+     */
     public AccountDto createAccount(CreateAccountRequest request) {
         var account = new Account()
                 .setCustomerId(request.getCustomerId())
@@ -57,6 +61,11 @@ public class AccountService {
         return AccountDto.from(account);
     }
 
+    /**
+     * Find account by account id
+     * @param id account id
+     * @return account dto
+     */
     public AccountDto find(Long id) {
         return AccountDto.from(
                 accountMapper.selectAccount(id).orElseThrow(() -> new AccountNotFoundException(id))

@@ -7,14 +7,18 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Base exception handler
+ */
 @ControllerAdvice
-public class ExceptionHandler {
+public class BaseExceptionHandler {
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(AccountNotFoundException.class)
+    @ExceptionHandler(AccountNotFoundException.class)
     public final ResponseEntity<Object> handleAccountNotFoundException(AccountNotFoundException ex) {
         List<String> details = new ArrayList<>();
         details.add(ex.getLocalizedMessage());
@@ -22,7 +26,7 @@ public class ExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(value = {
+    @ExceptionHandler(value = {
             InvalidCurrencyException.class,
             InsufficientFundsException.class
     })
@@ -33,7 +37,7 @@ public class ExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         List<String> details = new ArrayList<>();
         for (ObjectError error : ex.getBindingResult().getAllErrors()) {
@@ -43,7 +47,7 @@ public class ExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(HttpMessageNotReadableException.class)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
     protected ResponseEntity<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         if (ex.getCause() instanceof InvalidFormatException) {
             return handleInvalidFormatException((InvalidFormatException) ex.getCause());
@@ -59,7 +63,7 @@ public class ExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)
     public final ResponseEntity<Object> handle(Exception ex) {
         ErrorResponse error = new ErrorResponse("Server Error", new ArrayList<>());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);

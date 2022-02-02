@@ -6,6 +6,9 @@ import lombok.experimental.Accessors;
 import java.math.BigDecimal;
 import java.util.Currency;
 
+/**
+ * Balance entity
+ */
 @Data
 @Accessors(chain = true)
 public class Balance {

@@ -16,12 +16,6 @@ services:
       timeout: 5s
       retries: 5
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-
   rabbitmq:
     image: rabbitmq:3.9-management
     ports:
@@ -36,7 +30,7 @@ services:
   bank-app:
     image: bank-app
     ports:
-      - 8081:8081
+      - 8080:8080
     depends_on:
       db:
         condition: service_healthy

@@ -11,6 +11,9 @@ import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.Currency;
 
+/**
+ * Request object for creating a new transaction
+ */
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)

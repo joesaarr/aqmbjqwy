@@ -14,6 +14,9 @@ import java.util.List;
 
 import static bank.controller.TransactionController.PATH;
 
+/**
+ * Transaction controller
+ */
 @Validated
 @RestController
 @RequestMapping(PATH)
