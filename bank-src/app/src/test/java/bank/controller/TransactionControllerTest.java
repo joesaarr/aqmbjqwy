@@ -125,11 +125,11 @@ public class TransactionControllerTest {
         accountMapper.insertAccount(account);
 
         var balance = new Balance()
-                .setCurrency(Currency.getInstance("EUR")).setAmount(BigDecimal.valueOf(-1L));
+                .setCurrency(Currency.getInstance("EUR")).setAmount(BigDecimal.ZERO);
         balanceMapper.insertBalance(balance, account);
 
         var transactionRequest = TestData.generateTransactionRequest(account.getId());
-        transactionRequest.setAmount(null);
+        transactionRequest.setAmount(BigDecimal.valueOf(-1L));
 
         this.mockMvc
                 .perform(post(TransactionController.PATH)

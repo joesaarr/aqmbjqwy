@@ -5,7 +5,7 @@
 <mapper namespace="bank.data.BalanceMapper">
 
     <update id="updateBalance">
-        update balance set amount = #{amount} where id = #{id}
+        update balance set amount = amount + #{balanceChange} where id = #{balance.id}
     </update>
 
     <insert id="insertBalance" useGeneratedKeys="true" keyColumn="id" keyProperty="balance.id">

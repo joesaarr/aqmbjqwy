@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS account (
 
 CREATE TABLE IF NOT EXISTS balance (
     id serial,
-    amount numeric NOT NULL,
+    amount numeric NOT NULL CHECK (amount >= 0),
     currency varchar(255) NOT NULL,
     account_id int NOT NULL,
     CONSTRAINT fk_account

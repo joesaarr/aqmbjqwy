@@ -21,7 +21,6 @@ public class CurrencyTypeHandler extends BaseTypeHandler<Currency> {
 
     @Override
     public Currency getNullableResult(ResultSet rs, String columnName) throws SQLException {
-        // FIXME null handling
         return Currency.getInstance(rs.getString(columnName));
     }
 

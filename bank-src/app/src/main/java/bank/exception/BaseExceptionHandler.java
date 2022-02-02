@@ -65,6 +65,7 @@ public class BaseExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Object> handle(Exception ex) {
+        ex.printStackTrace();
         ErrorResponse error = new ErrorResponse("Server Error", new ArrayList<>());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }

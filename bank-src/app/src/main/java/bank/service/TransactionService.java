@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * Transaction service
  */
 @Service
-@Transactional(isolation = Isolation.SERIALIZABLE)
+@Transactional(isolation = Isolation.READ_COMMITTED)
 public class TransactionService {
 
     @Autowired
@@ -53,9 +53,14 @@ public class TransactionService {
                 .filter(b -> b.getCurrency().equals(request.getCurrency()))
                 .findAny().orElseThrow(InvalidCurrencyException::new);
 
-        balance.setAmount(calculateNewBalance(
-                balance.getAmount(), request.getDirection(), request.getAmount()
-        ));
+        var balanceChange = calculateBalanceChange(request.getDirection(), request.getAmount());
+
+        var newBalance = balance.getAmount().add(balanceChange);
+        if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InsufficientFundsException();
+        }
+
+        balanceMapper.updateBalance(balance, balanceChange);
 
         var transaction = new Transaction()
                 .setAccountId(account.getId())
@@ -63,9 +68,8 @@ public class TransactionService {
                 .setCurrency(request.getCurrency())
                 .setDirection(request.getDirection())
                 .setDescription(request.getDescription())
-                .setBalanceAfter(balance.getAmount());
+                .setBalanceAfter(newBalance);
 
-        balanceMapper.updateBalance(balance);
         transactionMapper.insertTransaction(transaction);
 
         var transactionDto = TransactionDto.from(transaction);
@@ -89,16 +93,10 @@ public class TransactionService {
                 .collect(Collectors.toList());
     }
 
-    private BigDecimal calculateNewBalance(BigDecimal balanceAmount,
-                                           TransactionDirection direction,
-                                           BigDecimal transactionAmount) {
-        BigDecimal newBalance = switch (direction) {
-            case IN -> balanceAmount.add(transactionAmount);
-            case OUT -> balanceAmount.subtract(transactionAmount);
+    private BigDecimal calculateBalanceChange(TransactionDirection direction, BigDecimal transactionAmount) {
+        return switch (direction) {
+            case IN -> transactionAmount;
+            case OUT -> transactionAmount.negate();
         };
-        if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
-            throw new InsufficientFundsException();
-        }
-        return newBalance;
     }
 }
