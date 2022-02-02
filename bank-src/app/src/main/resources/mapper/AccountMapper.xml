@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bank.data.AccountMapper">
+
+    <resultMap id="accountResultMap" type="Account">
+        <id property="id" column="id"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="country" column="country"/>
+        <association property="balances" column="id" javaType = "java.util.List" select = "selectBalances"/>
+    </resultMap>
+
+    <select id="selectAccount" resultMap="accountResultMap">
+        select * from account where id = #{id}
+    </select>
+
+    <resultMap id="balanceResultMap" type="Balance">
+        <id property="id" column="id"/>
+        <result property="amount" column="amount"/>
+        <result property="currency" column="currency" typeHandler="bank.data.CurrencyTypeHandler"/>
+    </resultMap>
+
+    <select id="selectBalances" resultMap="balanceResultMap">
+        select * from balance where account_id = #{accountId}
+    </select>
+
+    <insert id="insertAccount" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into account(customer_id,country)
+        values (#{customerId},#{country})
+    </insert>
+
+</mapper>
